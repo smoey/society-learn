@@ -131,58 +131,297 @@ a { color: inherit; }
 .chip-feudal { background: var(--feudal); }
 .chip-capitalist { background: var(--capitalist); }
 
-/* ===== Timeline ===== */
-.timeline-track {
+/* ===== Timeline story cards ===== */
+.tl-progress {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 10px;
-  align-items: stretch;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
-.tl-node {
-  flex: 1 1 140px;
-  min-width: 120px;
-  background: var(--card);
-  border: 3px solid #ddd;
-  border-radius: 14px;
-  padding: 14px 12px;
-  text-align: center;
+.tl-step-pills {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tl-step-count {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--accent);
+  background: #e0f7fa;
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.tl-rail {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 0;
+}
+.tl-rail-btn {
+  flex: 1 1 0;
+  min-width: 64px;
+  min-height: 44px;
+  padding: 8px 6px;
+  border-radius: 12px;
   font-weight: 700;
-  transition: .2s;
-  position: relative;
-}
-.tl-node:hover { transform: translateY(-2px); }
-.tl-node.active { box-shadow: 0 0 0 3px var(--focus); }
-.tl-node[data-id="primitive"] { border-color: var(--primitive); background: var(--primitive-soft); color: var(--primitive); }
-.tl-node[data-id="slave"] { border-color: var(--slave); background: var(--slave-soft); color: var(--slave); }
-.tl-node[data-id="feudal"] { border-color: var(--feudal); background: var(--feudal-soft); color: var(--feudal); }
-.tl-node[data-id="capitalist"] { border-color: var(--capitalist); background: var(--capitalist-soft); color: var(--capitalist); }
-.tl-arrow {
-  align-self: center;
+  font-size: .78rem;
+  line-height: 1.25;
+  border: 2px solid #ddd;
+  background: #fff;
   color: var(--muted);
+  transition: .2s;
+}
+.tl-rail-btn.active {
+  color: #fff;
+  box-shadow: 0 0 0 3px var(--focus);
+}
+.tl-rail-btn[data-id="primitive"] { border-color: var(--primitive); }
+.tl-rail-btn[data-id="slave"] { border-color: var(--slave); }
+.tl-rail-btn[data-id="feudal"] { border-color: var(--feudal); }
+.tl-rail-btn[data-id="capitalist"] { border-color: var(--capitalist); }
+.tl-rail-btn[data-id="primitive"].active { background: var(--primitive); border-color: var(--primitive); }
+.tl-rail-btn[data-id="slave"].active { background: var(--slave); border-color: var(--slave); }
+.tl-rail-btn[data-id="feudal"].active { background: var(--feudal); border-color: var(--feudal); }
+.tl-rail-btn[data-id="capitalist"].active { background: var(--capitalist); border-color: var(--capitalist); }
+.tl-rail-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #cfd8dc; flex: 0 0 auto;
+}
+.tl-rail-dot.done { background: var(--accent); }
+
+.tl-story {
+  border-radius: 16px;
+  border: 3px solid #e0e6ed;
+  padding: 14px;
+  background: #fff;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.tl-story .society-chip { margin-bottom: 4px; }
+.tl-story .scene-caption {
+  font-size: clamp(1.05rem, 3.8vw, 1.25rem);
+  color: var(--text);
+  margin-top: 10px;
+  line-height: 1.4;
+}
+.tl-story .scene-caption .memo-label {
+  display: block;
+  font-size: .8rem;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 2px;
+  letter-spacing: 0;
+}
+.tl-points {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+.tl-points li {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  background: #f7f9fc;
+  border-radius: 12px;
+  font-size: .95rem;
+  line-height: 1.5;
+}
+.tl-points-toggle {
+  display: none;
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px;
+  min-height: 44px;
+  border-radius: 12px;
+  background: #eceff1;
+  color: var(--text);
   font-weight: 700;
-  font-size: 1.2rem;
-  flex: 0 0 auto;
+  font-size: .92rem;
 }
-@media (max-width: 640px) {
-  .tl-arrow { display: none; }
-  .timeline-track { flex-direction: column; }
+@media (max-width: 420px) {
+  .tl-points.collapsed li:nth-child(n+3) { display: none; }
+  .tl-points-toggle { display: block; }
 }
-.tl-detail { display: none; }
-.tl-detail.show { display: block; }
-.tl-detail ul { padding-left: 1.2em; margin: 10px 0; }
-.tl-detail li { margin: 8px 0; }
 .why-next {
   background: #fff8e1;
   border-left: 4px solid #f39c12;
   padding: 12px 14px;
   border-radius: 0 12px 12px 0;
-  margin-top: 12px;
+  margin-top: 14px;
   font-size: .95rem;
 }
 .why-next strong { color: #d68910; }
 
-/* ===== Compare table ===== */
+.tl-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+.tl-nav-btn {
+  flex: 1;
+  min-height: 48px;
+  padding: 12px 10px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 1rem;
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,131,143,.25);
+}
+.tl-nav-btn:disabled {
+  opacity: .4;
+  cursor: default;
+  box-shadow: none;
+}
+.tl-nav-btn.secondary { background: #607d8b; box-shadow: none; }
+.tl-nav-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.tl-next-preview {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f7f9fc;
+  font-size: .88rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+}
+.tl-next-preview .preview-thumb {
+  width: 48px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #e8eef3;
+}
+.tl-next-preview strong { color: var(--text); }
+
+/* ===== Compare dimension cards ===== */
+.dim-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.dim-chip {
+  min-height: 44px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: .9rem;
+  background: #fff;
+  border: 2px solid #dfe6ee;
+  color: var(--text);
+  transition: .15s;
+}
+.dim-chip.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--focus);
+}
+.dim-chip:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.dim-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+@media (min-width: 640px) {
+  .dim-cards { grid-template-columns: 1fr 1fr; }
+}
+.dim-card {
+  border-radius: 14px;
+  border: 3px solid;
+  padding: 14px;
+  text-align: left;
+  background: #fff;
+  min-height: 44px;
+  transition: .15s;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+  color: inherit;
+}
+.dim-card:hover { transform: translateY(-1px); filter: brightness(.98); }
+.dim-card:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.dim-card.primitive { border-color: var(--primitive); background: var(--primitive-soft); }
+.dim-card.slave { border-color: var(--slave); background: var(--slave-soft); }
+.dim-card.feudal { border-color: var(--feudal); background: var(--feudal-soft); }
+.dim-card.capitalist { border-color: var(--capitalist); background: var(--capitalist-soft); }
+.dim-card .dim-card-name {
+  font-weight: 800;
+  font-size: .95rem;
+  margin-bottom: 4px;
+}
+.dim-card.primitive .dim-card-name { color: var(--primitive); }
+.dim-card.slave .dim-card-name { color: var(--slave); }
+.dim-card.feudal .dim-card-name { color: var(--feudal); }
+.dim-card.capitalist .dim-card-name { color: var(--capitalist); }
+.dim-card .dim-card-memo {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.dim-card .dim-card-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+.dim-card .tool-icon {
+  width: 48px;
+  height: 48px;
+  margin-right: 0;
+}
+.dim-card .tap-hint {
+  margin-top: 8px;
+  font-size: .75rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.compare-basic-note {
+  position: sticky;
+  bottom: 0;
+  background: #e8f5e9;
+  color: #1e8449;
+  font-weight: 600;
+  font-size: .92rem;
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 -4px 16px rgba(0,0,0,.04);
+  z-index: 2;
+  margin-bottom: 12px;
+}
+
+.full-table-disclosure {
+  margin-top: 8px;
+  border-radius: 12px;
+  background: #f7f9fc;
+  padding: 8px 12px;
+}
+.full-table-disclosure summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 8px 4px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.full-table-disclosure[open] summary { margin-bottom: 8px; color: var(--accent); }
+
 .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .compare-table {
   width: 100%;
@@ -529,17 +768,20 @@ a { color: inherit; }
   <section id="panel-timeline" class="panel active" role="tabpanel">
     <div class="card">
       <h2>社会发展时间线</h2>
-      <p class="hint">点击下方四个阶段，查看要点与「为何进入下一阶段」。</p>
-      <div class="timeline-track" id="timelineTrack">
-        <button type="button" class="tl-node" data-id="primitive">原始社会</button>
-        <span class="tl-arrow" aria-hidden="true">→</span>
-        <button type="button" class="tl-node" data-id="slave">奴隶社会</button>
-        <span class="tl-arrow" aria-hidden="true">→</span>
-        <button type="button" class="tl-node" data-id="feudal">封建社会</button>
-        <span class="tl-arrow" aria-hidden="true">→</span>
-        <button type="button" class="tl-node" data-id="capitalist">资本主义社会</button>
+      <p class="hint">一次看一个阶段；左右滑动或点「上一阶段 / 下一阶段」。点上方进度可跳转。</p>
+      <div class="tl-progress">
+        <div class="tl-step-pills">
+          <span class="tl-step-count" id="tlStepCount" aria-live="polite">1/4</span>
+          <span style="font-size:.85rem;color:var(--muted);">顺序：原始→奴隶→封建→资本</span>
+        </div>
+        <div class="tl-rail" id="tlRail" role="tablist" aria-label="社会阶段进度"></div>
       </div>
-      <div id="tlDetail" class="tl-detail"></div>
+      <div class="tl-story" id="tlStory" tabindex="0" aria-label="阶段故事卡片，可左右滑动切换"></div>
+      <div class="tl-controls">
+        <button type="button" class="tl-nav-btn secondary" id="tlPrev">上一阶段</button>
+        <button type="button" class="tl-nav-btn" id="tlNext">下一阶段</button>
+      </div>
+      <div class="tl-next-preview" id="tlNextPreview" hidden></div>
     </div>
   </section>
 
@@ -547,21 +789,29 @@ a { color: inherit; }
   <section id="panel-compare" class="panel" role="tabpanel">
     <div class="card">
       <h2>四种社会形态比较</h2>
-      <p class="hint">点击单元格可高亮同行/同列，并弹出简短解说。</p>
-      <div class="table-wrap">
-        <table class="compare-table" id="compareTable">
-          <thead>
-            <tr>
-              <th>比较项目</th>
-              <th class="th-primitive">原始社会</th>
-              <th class="th-slave">奴隶社会</th>
-              <th class="th-feudal">封建社会</th>
-              <th class="th-capitalist">资本主义社会</th>
-            </tr>
-          </thead>
-          <tbody id="compareBody"></tbody>
-        </table>
+      <p class="hint">先点上方维度芯片，再看四种社会卡片；点卡片可读解说。手机无需左右滑动整表。</p>
+      <div class="dim-chips" id="dimChips" role="tablist" aria-label="比较维度"></div>
+      <div class="dim-cards" id="dimCards"></div>
+      <div class="compare-basic-note" id="compareBasicNote">
+        基本矛盾：生产力和生产关系、经济基础与上层建筑的矛盾运动是人类社会的基本矛盾
       </div>
+      <details class="full-table-disclosure">
+        <summary>看完整表（可选）</summary>
+        <div class="table-wrap">
+          <table class="compare-table" id="compareTable">
+            <thead>
+              <tr>
+                <th>比较项目</th>
+                <th class="th-primitive">原始社会</th>
+                <th class="th-slave">奴隶社会</th>
+                <th class="th-feudal">封建社会</th>
+                <th class="th-capitalist">资本主义社会</th>
+              </tr>
+            </thead>
+            <tbody id="compareBody"></tbody>
+          </table>
+        </div>
+      </details>
     </div>
   </section>
 
@@ -643,8 +893,8 @@ a { color: inherit; }
     <h3 id="introTitle">怎么玩</h3>
     <p>这是一份关于<strong>四种社会形态</strong>的互动学习页，对应教材思维导图与比较表。</p>
     <ol>
-      <li><strong>时间线</strong>：点选四个阶段，看要点和演进原因。</li>
-      <li><strong>对比表</strong>：点单元格高亮同行同列，并读简短解说。</li>
+      <li><strong>时间线</strong>：一次看一个阶段故事卡；左右滑动或点「上一/下一阶段」，记口诀与演进原因。</li>
+      <li><strong>对比表</strong>：先选维度芯片，再看四种社会卡片；点卡片读解说（也可展开完整表）。</li>
       <li><strong>配对游戏</strong>：把社会形态与工具、所有制、主要矛盾配对，计分再玩。</li>
       <li><strong>小测验</strong>：12 道单选题，即时对错与进度条。</li>
       <li><strong>总览图</strong>：简化版思维导图，一眼看清演进。</li>
@@ -762,33 +1012,132 @@ a { color: inherit; }
     if (!localStorage.getItem(LS_KEY)) showIntro();
   } catch (e) { showIntro(); }
 
-  /* ===== Timeline ===== */
-  const tlDetail = document.getElementById('tlDetail');
-  document.querySelectorAll('.tl-node').forEach(node => {
-    node.addEventListener('click', () => {
-      document.querySelectorAll('.tl-node').forEach(n => n.classList.remove('active'));
-      node.classList.add('active');
-      const s = SOCIETIES[node.dataset.id];
-      const sc = SCENE[s.id];
-      let html = '<span class="society-chip chip-' + s.color + '">' + s.name + '</span>';
-      html += '<div class="scene-img-wrap">' +
-        '<img class="scene-img" src="' + sc.src + '" alt="' + s.name + '场景插图" loading="lazy">' +
-        '<div class="scene-caption">记忆口诀：「' + sc.caption + '」</div>' +
-        '</div>';
-      html += '<ul>' + s.points.map(p => '<li>' + p + '</li>').join('') + '</ul>';
-      if (s.whyNext) {
-        html += '<div class="why-next"><strong>为何进入下一阶段：</strong>' + s.whyNext + '</div>';
-      } else {
-        html += '<div class="why-next"><strong>本阶段：</strong>教材侧重萌芽、确立与经济危机等要点。</div>';
-      }
-      tlDetail.innerHTML = html;
-      tlDetail.classList.add('show');
-    });
-  });
-  // Auto-open first
-  document.querySelector('.tl-node[data-id="primitive"]').click();
+  /* ===== Timeline story cards ===== */
+  let tlIndex = 0;
+  const tlRail = document.getElementById('tlRail');
+  const tlStory = document.getElementById('tlStory');
+  const tlStepCount = document.getElementById('tlStepCount');
+  const tlPrev = document.getElementById('tlPrev');
+  const tlNext = document.getElementById('tlNext');
+  const tlNextPreview = document.getElementById('tlNextPreview');
+  let tlPointsExpanded = false;
 
-  /* ===== Compare table ===== */
+  ORDER.forEach((id, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'tl-rail-btn';
+    b.dataset.id = id;
+    b.setAttribute('role', 'tab');
+    b.textContent = SOCIETIES[id].name.replace('社会', '');
+    b.setAttribute('aria-label', SOCIETIES[id].name);
+    b.addEventListener('click', () => goTimeline(i));
+    tlRail.appendChild(b);
+    if (i < ORDER.length - 1) {
+      const dot = document.createElement('span');
+      dot.className = 'tl-rail-dot';
+      dot.setAttribute('aria-hidden', 'true');
+      tlRail.appendChild(dot);
+    }
+  });
+
+  function goTimeline(i) {
+    if (i < 0 || i >= ORDER.length) return;
+    tlIndex = i;
+    tlPointsExpanded = false;
+    renderTimeline();
+  }
+
+  function renderTimeline() {
+    const id = ORDER[tlIndex];
+    const s = SOCIETIES[id];
+    const sc = SCENE[id];
+    tlStepCount.textContent = (tlIndex + 1) + '/' + ORDER.length;
+
+    tlRail.querySelectorAll('.tl-rail-btn').forEach((btn, idx) => {
+      const active = ORDER[idx] === id;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    tlRail.querySelectorAll('.tl-rail-dot').forEach((dot, idx) => {
+      dot.classList.toggle('done', idx < tlIndex);
+    });
+
+    const why = s.whyNext
+      ? '<div class="why-next"><strong>为何进入下一阶段：</strong>' + s.whyNext + '</div>'
+      : '<div class="why-next"><strong>本阶段：</strong>教材侧重萌芽、确立与经济危机等要点。</div>';
+
+    tlStory.innerHTML =
+      '<span class="society-chip chip-' + s.color + '">' + s.name + '</span>' +
+      '<div class="scene-img-wrap">' +
+        '<img class="scene-img" src="' + sc.src + '" alt="' + s.name + '场景插图" loading="lazy" draggable="false">' +
+        '<div class="scene-caption"><span class="memo-label">记忆口诀</span>「' + sc.caption + '」</div>' +
+      '</div>' +
+      '<ul class="tl-points' + (tlPointsExpanded ? '' : ' collapsed') + '" id="tlPoints">' +
+        s.points.map(p => '<li>' + p + '</li>').join('') +
+      '</ul>' +
+      '<button type="button" class="tl-points-toggle" id="tlPointsToggle">' +
+        (tlPointsExpanded ? '收起要点' : '展开要点') +
+      '</button>' +
+      why;
+
+    const toggle = document.getElementById('tlPointsToggle');
+    if (toggle) {
+      toggle.addEventListener('click', () => {
+        tlPointsExpanded = !tlPointsExpanded;
+        const ul = document.getElementById('tlPoints');
+        ul.classList.toggle('collapsed', !tlPointsExpanded);
+        toggle.textContent = tlPointsExpanded ? '收起要点' : '展开要点';
+      });
+    }
+
+    tlPrev.disabled = tlIndex === 0;
+    tlNext.disabled = tlIndex === ORDER.length - 1;
+    tlNext.textContent = tlIndex === ORDER.length - 1 ? '已是最后阶段' : '下一阶段';
+
+    if (tlIndex < ORDER.length - 1) {
+      const nid = ORDER[tlIndex + 1];
+      const ns = SOCIETIES[nid];
+      const nsc = SCENE[nid];
+      tlNextPreview.hidden = false;
+      tlNextPreview.innerHTML =
+        '<img class="preview-thumb" src="' + nsc.src + '" alt="" loading="lazy">' +
+        '<span>下一站预览：<strong class="chip-' + ns.color + '" style="color:var(--' + ns.color + ')">' +
+        ns.name + '</strong> · 「' + nsc.caption + '」</span>';
+    } else {
+      tlNextPreview.hidden = true;
+      tlNextPreview.innerHTML = '';
+    }
+  }
+
+  tlPrev.addEventListener('click', () => goTimeline(tlIndex - 1));
+  tlNext.addEventListener('click', () => goTimeline(tlIndex + 1));
+
+  // Touch swipe on story card
+  let touchX0 = null, touchY0 = null;
+  tlStory.addEventListener('touchstart', e => {
+    if (!e.changedTouches || !e.changedTouches[0]) return;
+    touchX0 = e.changedTouches[0].clientX;
+    touchY0 = e.changedTouches[0].clientY;
+  }, { passive: true });
+  tlStory.addEventListener('touchend', e => {
+    if (touchX0 == null || !e.changedTouches || !e.changedTouches[0]) return;
+    const dx = e.changedTouches[0].clientX - touchX0;
+    const dy = e.changedTouches[0].clientY - touchY0;
+    touchX0 = touchY0 = null;
+    if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy)) return;
+    if (dx < 0) goTimeline(tlIndex + 1);
+    else goTimeline(tlIndex - 1);
+  }, { passive: true });
+
+  // Keyboard on focused story
+  tlStory.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTimeline(tlIndex - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); goTimeline(tlIndex + 1); }
+  });
+
+  renderTimeline();
+
+  /* ===== Compare: dimension cards + optional full table ===== */
   const compareRows = [
     {
       label: '生产力\n（生产工具）',
@@ -852,6 +1201,72 @@ a { color: inherit; }
     }
   ];
 
+  function cellMnemonic(row, sid) {
+    if (row.shortLabel === '生产工具') return SCENE[sid].caption;
+    const t = row.cells[sid].text;
+    // Prefer short memorable phrases from cell text
+    const first = t.split(/[；（]/)[0].trim();
+    if (first.length <= 16) return first;
+    return first.slice(0, 14) + '…';
+  }
+
+  let dimIndex = 0;
+  const dimChips = document.getElementById('dimChips');
+  const dimCards = document.getElementById('dimCards');
+
+  compareRows.forEach((row, i) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'dim-chip' + (i === 0 ? ' active' : '');
+    chip.textContent = row.shortLabel;
+    chip.setAttribute('role', 'tab');
+    chip.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    chip.addEventListener('click', () => {
+      dimIndex = i;
+      renderDimCards();
+    });
+    dimChips.appendChild(chip);
+  });
+
+  function openCellTip(row, sid) {
+    document.getElementById('cellModalTitle').textContent =
+      SOCIETIES[sid].name + ' · ' + row.shortLabel;
+    document.getElementById('cellModalBody').textContent = row.cells[sid].tip;
+    cellModal.classList.add('show');
+  }
+
+  function renderDimCards() {
+    const row = compareRows[dimIndex];
+    dimChips.querySelectorAll('.dim-chip').forEach((c, i) => {
+      const on = i === dimIndex;
+      c.classList.toggle('active', on);
+      c.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    dimCards.innerHTML = '';
+    ORDER.forEach(sid => {
+      const s = SOCIETIES[sid];
+      const cell = row.cells[sid];
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'dim-card ' + s.color;
+      const memo = cellMnemonic(row, sid);
+      let bodyInner = '';
+      if (dimIndex === 0 && TOOL_ICON[sid]) {
+        bodyInner = '<img class="tool-icon" src="' + TOOL_ICON[sid] +
+          '" alt="" loading="lazy"><span>' + cell.text + '</span>';
+      } else {
+        bodyInner = '<span>' + cell.text + '</span>';
+      }
+      btn.innerHTML =
+        '<div class="dim-card-name">' + s.name + '</div>' +
+        '<div class="dim-card-memo">记忆：「' + memo + '」</div>' +
+        '<div class="dim-card-body">' + bodyInner + '</div>' +
+        '<div class="tap-hint">点我看解说</div>';
+      btn.addEventListener('click', () => openCellTip(row, sid));
+      dimCards.appendChild(btn);
+    });
+  }
+
   const tbody = document.getElementById('compareBody');
   compareRows.forEach((row, ri) => {
     const tr = document.createElement('tr');
@@ -877,7 +1292,6 @@ a { color: inherit; }
     });
     tbody.appendChild(tr);
   });
-  // Footer basic contradiction
   const fr = document.createElement('tr');
   fr.className = 'footer-row';
   const ftd = document.createElement('td');
@@ -899,10 +1313,7 @@ a { color: inherit; }
       else if (sameR) cell.classList.add('hl-row');
       else if (sameC) cell.classList.add('hl-col');
     });
-    document.getElementById('cellModalTitle').textContent =
-      SOCIETIES[sid].name + ' · ' + row.shortLabel;
-    document.getElementById('cellModalBody').textContent = row.cells[sid].tip;
-    cellModal.classList.add('show');
+    openCellTip(row, sid);
   }
   document.getElementById('cellModalClose').addEventListener('click', () => {
     cellModal.classList.remove('show');
@@ -910,6 +1321,8 @@ a { color: inherit; }
   cellModal.addEventListener('click', e => {
     if (e.target === cellModal) cellModal.classList.remove('show');
   });
+
+  renderDimCards();
 
   /* ===== Match game ===== */
   const matchRounds = [
