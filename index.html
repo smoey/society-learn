@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>原始社会的解体和阶级社会的演进 · 四种社会形态</title>
+<style>
+:root {
+  --primitive: #e74c3c;
+  --primitive-soft: #fdecea;
+  --slave: #8e44ad;
+  --slave-soft: #f5eef8;
+  --feudal: #2980b9;
+  --feudal-soft: #eaf4fb;
+  --capitalist: #27ae60;
+  --capitalist-soft: #eafaf1;
+  --bg: #f0f7fa;
+  --card: #ffffff;
+  --text: #2c3e50;
+  --muted: #5d6d7e;
+  --accent: #00838f;
+  --shadow: 0 8px 24px rgba(0,0,0,.08);
+  --radius: 16px;
+  --focus: #f39c12;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+  background: linear-gradient(160deg, #e0f7fa 0%, #f5f7fa 50%, #e8f5e9 100%);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.55;
+}
+button { font-family: inherit; cursor: pointer; border: none; }
+a { color: inherit; }
+
+.app { max-width: 1100px; margin: 0 auto; padding: 16px 16px 100px; }
+
+/* Header */
+.header {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+.header h1 {
+  font-size: clamp(1.15rem, 3.5vw, 1.55rem);
+  color: var(--accent);
+  line-height: 1.35;
+}
+.header .sub { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+.help-btn {
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: .95rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0,131,143,.3);
+}
+.help-btn:hover { filter: brightness(1.08); }
+.help-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* Nav tabs */
+.nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 12px;
+  margin-bottom: 8px;
+  -webkit-overflow-scrolling: touch;
+}
+.nav-btn {
+  flex: 0 0 auto;
+  background: var(--card);
+  color: var(--text);
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: .95rem;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+  border: 2px solid transparent;
+  transition: .2s;
+}
+.nav-btn:hover { transform: translateY(-1px); }
+.nav-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.nav-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.panel { display: none; animation: fadeIn .25s ease; }
+.panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px;
+  margin-bottom: 14px;
+}
+.card h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: var(--accent);
+}
+.hint { color: var(--muted); font-size: .9rem; margin-bottom: 14px; }
+
+/* Society chips */
+.society-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: .92rem;
+  color: #fff;
+}
+.chip-primitive { background: var(--primitive); }
+.chip-slave { background: var(--slave); }
+.chip-feudal { background: var(--feudal); }
+.chip-capitalist { background: var(--capitalist); }
+
+/* ===== Timeline ===== */
+.timeline-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: stretch;
+  margin-bottom: 16px;
+}
+.tl-node {
+  flex: 1 1 140px;
+  min-width: 120px;
+  background: var(--card);
+  border: 3px solid #ddd;
+  border-radius: 14px;
+  padding: 14px 12px;
+  text-align: center;
+  font-weight: 700;
+  transition: .2s;
+  position: relative;
+}
+.tl-node:hover { transform: translateY(-2px); }
+.tl-node.active { box-shadow: 0 0 0 3px var(--focus); }
+.tl-node[data-id="primitive"] { border-color: var(--primitive); background: var(--primitive-soft); color: var(--primitive); }
+.tl-node[data-id="slave"] { border-color: var(--slave); background: var(--slave-soft); color: var(--slave); }
+.tl-node[data-id="feudal"] { border-color: var(--feudal); background: var(--feudal-soft); color: var(--feudal); }
+.tl-node[data-id="capitalist"] { border-color: var(--capitalist); background: var(--capitalist-soft); color: var(--capitalist); }
+.tl-arrow {
+  align-self: center;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 1.2rem;
+  flex: 0 0 auto;
+}
+@media (max-width: 640px) {
+  .tl-arrow { display: none; }
+  .timeline-track { flex-direction: column; }
+}
+.tl-detail { display: none; }
+.tl-detail.show { display: block; }
+.tl-detail ul { padding-left: 1.2em; margin: 10px 0; }
+.tl-detail li { margin: 8px 0; }
+.why-next {
+  background: #fff8e1;
+  border-left: 4px solid #f39c12;
+  padding: 12px 14px;
+  border-radius: 0 12px 12px 0;
+  margin-top: 12px;
+  font-size: .95rem;
+}
+.why-next strong { color: #d68910; }
+
+/* ===== Compare table ===== */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.compare-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 720px;
+  font-size: .88rem;
+}
+.compare-table th, .compare-table td {
+  border: 1px solid #d5dde5;
+  padding: 10px 8px;
+  vertical-align: top;
+  transition: background .15s;
+}
+.compare-table thead th {
+  background: var(--accent);
+  color: #fff;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.compare-table thead th.th-primitive { background: var(--primitive); }
+.compare-table thead th.th-slave { background: var(--slave); }
+.compare-table thead th.th-feudal { background: var(--feudal); }
+.compare-table thead th.th-capitalist { background: var(--capitalist); }
+.compare-table .row-label {
+  background: #eceff1;
+  font-weight: 700;
+  white-space: nowrap;
+  min-width: 110px;
+}
+.compare-table td.cell {
+  cursor: pointer;
+  background: #fff;
+}
+.compare-table td.cell:hover { filter: brightness(.97); }
+.compare-table td.cell.hl-row { background: #fff3cd !important; }
+.compare-table td.cell.hl-col { background: #d6eaf8 !important; }
+.compare-table td.cell.hl-both { background: #fcf3cf !important; box-shadow: inset 0 0 0 2px var(--focus); }
+.compare-table .footer-row td {
+  background: #e8f5e9;
+  font-weight: 600;
+  text-align: center;
+  color: #1e8449;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+.modal-backdrop.show { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: 18px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 85vh;
+  overflow: auto;
+  padding: 22px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.25);
+  animation: fadeIn .2s ease;
+}
+.modal h3 { margin-bottom: 10px; color: var(--accent); font-size: 1.15rem; }
+.modal p { margin: 8px 0; }
+.modal .close-btn {
+  margin-top: 16px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.modal .close-btn:focus-visible { outline: 3px solid var(--focus); }
+
+/* ===== Match game ===== */
+.match-score {
+  display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+  margin-bottom: 12px; font-weight: 600;
+}
+.match-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 560px) { .match-board { grid-template-columns: 1fr; } }
+.match-col h3 { font-size: 1rem; margin-bottom: 10px; color: var(--muted); }
+.match-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 14px 14px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  background: #f7f9fc;
+  border: 2px solid #dfe6ee;
+  font-weight: 600;
+  font-size: .95rem;
+  transition: .15s;
+}
+.match-item:hover:not(:disabled) { border-color: var(--accent); }
+.match-item.selected { border-color: var(--focus); background: #fff8e1; box-shadow: 0 0 0 2px var(--focus); }
+.match-item.correct { border-color: #27ae60; background: #eafaf1; color: #1e8449; }
+.match-item.wrong { border-color: #e74c3c; background: #fdecea; animation: shake .35s; }
+.match-item:disabled { opacity: .85; cursor: default; }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.round-badge {
+  display: inline-block;
+  background: #e3f2fd;
+  color: #1565c0;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: .85rem;
+}
+.action-btn {
+  background: var(--accent);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-top: 8px;
+}
+.action-btn.secondary { background: #607d8b; }
+.action-btn:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* ===== Quiz ===== */
+.progress-bar {
+  height: 12px;
+  background: #e0e6ed;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 10px 0 16px;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #27ae60);
+  width: 0%;
+  transition: width .3s ease;
+  border-radius: 999px;
+}
+.quiz-q { font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; }
+.quiz-opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: #f7f9fc;
+  border: 2px solid #dfe6ee;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.quiz-opt:hover:not(:disabled) { border-color: var(--accent); background: #eef7f8; }
+.quiz-opt.correct { border-color: #27ae60; background: #eafaf1; }
+.quiz-opt.wrong { border-color: #e74c3c; background: #fdecea; }
+.quiz-opt:disabled { cursor: default; }
+.quiz-feedback {
+  margin: 12px 0;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  display: none;
+}
+.quiz-feedback.ok { display: block; background: #eafaf1; color: #1e8449; }
+.quiz-feedback.bad { display: block; background: #fdecea; color: #c0392b; }
+.quiz-result {
+  text-align: center;
+  padding: 24px 12px;
+}
+.quiz-result .big { font-size: 2.4rem; margin: 8px 0; }
+.quiz-result .score-num { font-size: 3rem; font-weight: 800; color: var(--accent); }
+
+/* ===== Overview map ===== */
+.mindmap {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.mm-title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--accent);
+  padding: 10px;
+  background: #e0f7fa;
+  border-radius: 12px;
+}
+.mm-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 8px 0 16px;
+}
+.mm-step {
+  padding: 10px 16px;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 700;
+  font-size: .95rem;
+}
+.mm-step.primitive { background: var(--primitive); }
+.mm-step.slave { background: var(--slave); }
+.mm-step.feudal { background: var(--feudal); }
+.mm-step.capitalist { background: var(--capitalist); }
+.mm-arr { color: var(--muted); font-weight: 800; }
+.mm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+.mm-card {
+  border-radius: 14px;
+  padding: 14px;
+  border: 3px solid;
+  background: #fff;
+}
+.mm-card.primitive { border-color: var(--primitive); background: var(--primitive-soft); }
+.mm-card.slave { border-color: var(--slave); background: var(--slave-soft); }
+.mm-card.feudal { border-color: var(--feudal); background: var(--feudal-soft); }
+.mm-card.capitalist { border-color: var(--capitalist); background: var(--capitalist-soft); }
+.mm-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+.mm-card.primitive h3 { color: var(--primitive); }
+.mm-card.slave h3 { color: var(--slave); }
+.mm-card.feudal h3 { color: var(--feudal); }
+.mm-card.capitalist h3 { color: var(--capitalist); }
+.mm-card ul { padding-left: 1.15em; font-size: .88rem; }
+.mm-card li { margin: 5px 0; }
+
+.footer-note {
+  text-align: center;
+  color: var(--muted);
+  font-size: .8rem;
+  margin-top: 20px;
+  padding: 10px;
+}
+
+/* Intro overlay */
+#introOverlay .modal { max-width: 520px; }
+#introOverlay ol { padding-left: 1.3em; margin: 10px 0; }
+#introOverlay li { margin: 6px 0; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="header">
+    <div>
+      <h1>原始社会的解体和阶级社会的演进</h1>
+      <div class="sub">四种社会形态比较 · 中学政治互动学习</div>
+    </div>
+    <button type="button" class="help-btn" id="helpBtn" aria-label="怎么玩">怎么玩</button>
+  </header>
+
+  <nav class="nav" role="tablist" aria-label="学习模式">
+    <button type="button" class="nav-btn active" data-panel="timeline" role="tab" aria-selected="true">时间线</button>
+    <button type="button" class="nav-btn" data-panel="compare" role="tab">对比表</button>
+    <button type="button" class="nav-btn" data-panel="match" role="tab">配对游戏</button>
+    <button type="button" class="nav-btn" data-panel="quiz" role="tab">小测验</button>
+    <button type="button" class="nav-btn" data-panel="overview" role="tab">总览图</button>
+  </nav>
+
+  <!-- Timeline -->
+  <section id="panel-timeline" class="panel active" role="tabpanel">
+    <div class="card">
+      <h2>社会发展时间线</h2>
+      <p class="hint">点击下方四个阶段，查看要点与「为何进入下一阶段」。</p>
+      <div class="timeline-track" id="timelineTrack">
+        <button type="button" class="tl-node" data-id="primitive">原始社会</button>
+        <span class="tl-arrow" aria-hidden="true">→</span>
+        <button type="button" class="tl-node" data-id="slave">奴隶社会</button>
+        <span class="tl-arrow" aria-hidden="true">→</span>
+        <button type="button" class="tl-node" data-id="feudal">封建社会</button>
+        <span class="tl-arrow" aria-hidden="true">→</span>
+        <button type="button" class="tl-node" data-id="capitalist">资本主义社会</button>
+      </div>
+      <div id="tlDetail" class="tl-detail"></div>
+    </div>
+  </section>
+
+  <!-- Compare -->
+  <section id="panel-compare" class="panel" role="tabpanel">
+    <div class="card">
+      <h2>四种社会形态比较</h2>
+      <p class="hint">点击单元格可高亮同行/同列，并弹出简短解说。</p>
+      <div class="table-wrap">
+        <table class="compare-table" id="compareTable">
+          <thead>
+            <tr>
+              <th>比较项目</th>
+              <th class="th-primitive">原始社会</th>
+              <th class="th-slave">奴隶社会</th>
+              <th class="th-feudal">封建社会</th>
+              <th class="th-capitalist">资本主义社会</th>
+            </tr>
+          </thead>
+          <tbody id="compareBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Match -->
+  <section id="panel-match" class="panel" role="tabpanel">
+    <div class="card">
+      <h2>配对游戏</h2>
+      <p class="hint">先点左侧一项，再点右侧对应项。完成两轮不同维度后可再玩。</p>
+      <div class="match-score">
+        <span class="round-badge" id="matchRound">第 1 轮</span>
+        <span>得分：<strong id="matchScore">0</strong></span>
+        <span>正确：<strong id="matchCorrect">0</strong> / <strong id="matchTotal">0</strong></span>
+      </div>
+      <div id="matchDim" style="margin-bottom:12px;font-weight:700;color:var(--accent);"></div>
+      <div class="match-board">
+        <div class="match-col">
+          <h3>社会形态</h3>
+          <div id="matchLeft"></div>
+        </div>
+        <div class="match-col">
+          <h3 id="matchRightTitle">对应内容</h3>
+          <div id="matchRight"></div>
+        </div>
+      </div>
+      <div id="matchDone" style="display:none;margin-top:14px;">
+        <p style="font-weight:700;margin-bottom:8px;">本轮完成！</p>
+        <button type="button" class="action-btn" id="nextRoundBtn">下一轮</button>
+        <button type="button" class="action-btn secondary" id="replayMatchBtn">再玩一次</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quiz -->
+  <section id="panel-quiz" class="panel" role="tabpanel">
+    <div class="card">
+      <h2>小测验</h2>
+      <div id="quizProgressLabel" class="hint">第 1 / 12 题</div>
+      <div class="progress-bar"><div class="progress-fill" id="quizProgress"></div></div>
+      <div id="quizArea">
+        <div class="quiz-q" id="quizQ"></div>
+        <div id="quizOpts"></div>
+        <div class="quiz-feedback" id="quizFb"></div>
+        <button type="button" class="action-btn" id="quizNext" style="display:none;">下一题</button>
+      </div>
+      <div id="quizResult" class="quiz-result" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- Overview -->
+  <section id="panel-overview" class="panel" role="tabpanel">
+    <div class="card">
+      <h2>总览图</h2>
+      <p class="hint">对应教材思维导图：原始社会的解体和阶级社会的演进。</p>
+      <div class="mindmap">
+        <div class="mm-title">原始社会的解体和阶级社会的演进</div>
+        <div class="mm-flow">
+          <span class="mm-step primitive">原始社会</span>
+          <span class="mm-arr">→</span>
+          <span class="mm-step slave">奴隶社会</span>
+          <span class="mm-arr">→</span>
+          <span class="mm-step feudal">封建社会</span>
+          <span class="mm-arr">→</span>
+          <span class="mm-step capitalist">资本主义社会</span>
+        </div>
+        <div class="mm-grid" id="mmGrid"></div>
+        <div class="why-next" style="margin-top:8px;">
+          <strong>基本矛盾：</strong>生产力和生产关系、经济基础与上层建筑的矛盾运动是人类社会的基本矛盾。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="footer-note">内容依据教材示意图整理，用于课堂巩固复习。</p>
+</div>
+
+<!-- Intro / Help modal -->
+<div class="modal-backdrop" id="introOverlay" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+  <div class="modal">
+    <h3 id="introTitle">怎么玩</h3>
+    <p>这是一份关于<strong>四种社会形态</strong>的互动学习页，对应教材思维导图与比较表。</p>
+    <ol>
+      <li><strong>时间线</strong>：点选四个阶段，看要点和演进原因。</li>
+      <li><strong>对比表</strong>：点单元格高亮同行同列，并读简短解说。</li>
+      <li><strong>配对游戏</strong>：把社会形态与工具、所有制、主要矛盾配对，计分再玩。</li>
+      <li><strong>小测验</strong>：12 道单选题，即时对错与进度条。</li>
+      <li><strong>总览图</strong>：简化版思维导图，一眼看清演进。</li>
+    </ol>
+    <p style="color:var(--muted);font-size:.9rem;">提示：可随时点右上角「怎么玩」再看说明。</p>
+    <button type="button" class="close-btn" id="introClose">开始学习</button>
+  </div>
+</div>
+
+<!-- Cell explain modal -->
+<div class="modal-backdrop" id="cellModal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <h3 id="cellModalTitle"></h3>
+    <p id="cellModalBody"></p>
+    <button type="button" class="close-btn" id="cellModalClose">关闭</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const SOCIETIES = {
+    primitive: {
+      id: 'primitive',
+      name: '原始社会',
+      color: 'primitive',
+      points: [
+        '人类社会发展的最初阶段，也是最低阶段。',
+        '生产力非常低下；生产工具是石器（旧石器→新石器；后期出现金属工具）。',
+        '平均分配：由原始社会低下的生产力决定，受氏族制度的影响。',
+        '社会管理组织：氏族 → 部落 → 部落联盟（上层建筑）。'
+      ],
+      whyNext: '生产力发展推动个体劳动与私有制出现，阶级分化，原始社会解体，进入奴隶社会。'
+    },
+    slave: {
+      id: 'slave',
+      name: '奴隶社会',
+      color: 'slave',
+      points: [
+        '产生：阶级的出现（奴隶主阶级与奴隶阶级的对立）。',
+        '主要矛盾：奴隶主阶级和奴隶阶级的矛盾。',
+        '生产力：金属工具；协作劳动。',
+        '生产关系：奴隶主私有制；奴隶毫无人身自由。',
+        '国家产生：生产力发展 → 个体劳动盛行 → 私有制确立 → 阶级分化 → 国家。',
+        '进步意义：促进了生产力的发展，符合社会发展总趋势，是历史的进步。'
+      ],
+      whyNext: '奴隶社会后期，生产力发展到新的水平，出现封建制生产关系，进入封建社会。'
+    },
+    feudal: {
+      id: 'feudal',
+      name: '封建社会',
+      color: 'feudal',
+      points: [
+        '产生原因：奴隶社会后期，生产力发展到新水平时，出现封建制生产关系。',
+        '生产力状况：铁制农具、耕作技术、水利事业、手工业、冶铁业、商业、城市。',
+        '生产关系特点：地主土地所有制；农民被束缚在土地上，有一定人身自由但仍依附地主。',
+        '封建剥削：经济剥削（经济基础）+ 政治思想统治（国家特征）。'
+      ],
+      whyNext: '商品经济与手工工场、劳动力市场发展，资本主义生产关系萌芽，经资产阶级革命确立资本主义社会。'
+    },
+    capitalist: {
+      id: 'capitalist',
+      name: '资本主义社会',
+      color: 'capitalist',
+      points: [
+        '生产关系萌芽的表现：出现了手工工场和劳动力市场。',
+        '资本主义制度的确立：资产阶级革命。',
+        '资本主义经济危机：特征、本质（实质）、表现（教材强调点）。',
+        '资本家占有生产资料；工人出卖劳动力，资本家占有剩余价值。'
+      ],
+      whyNext: null
+    }
+  };
+
+  const ORDER = ['primitive', 'slave', 'feudal', 'capitalist'];
+
+  /* ===== Navigation ===== */
+  const panels = document.querySelectorAll('.panel');
+  const navBtns = document.querySelectorAll('.nav-btn');
+  navBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      navBtns.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      panels.forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+    });
+  });
+
+  /* ===== Intro ===== */
+  const intro = document.getElementById('introOverlay');
+  const LS_KEY = 'society-learn-intro-seen';
+  function showIntro() { intro.classList.add('show'); }
+  function hideIntro() {
+    intro.classList.remove('show');
+    try { localStorage.setItem(LS_KEY, '1'); } catch (e) {}
+  }
+  document.getElementById('introClose').addEventListener('click', hideIntro);
+  document.getElementById('helpBtn').addEventListener('click', showIntro);
+  try {
+    if (!localStorage.getItem(LS_KEY)) showIntro();
+  } catch (e) { showIntro(); }
+
+  /* ===== Timeline ===== */
+  const tlDetail = document.getElementById('tlDetail');
+  document.querySelectorAll('.tl-node').forEach(node => {
+    node.addEventListener('click', () => {
+      document.querySelectorAll('.tl-node').forEach(n => n.classList.remove('active'));
+      node.classList.add('active');
+      const s = SOCIETIES[node.dataset.id];
+      let html = '<span class="society-chip chip-' + s.color + '">' + s.name + '</span>';
+      html += '<ul>' + s.points.map(p => '<li>' + p + '</li>').join('') + '</ul>';
+      if (s.whyNext) {
+        html += '<div class="why-next"><strong>为何进入下一阶段：</strong>' + s.whyNext + '</div>';
+      } else {
+        html += '<div class="why-next"><strong>本阶段：</strong>教材侧重萌芽、确立与经济危机等要点。</div>';
+      }
+      tlDetail.innerHTML = html;
+      tlDetail.classList.add('show');
+    });
+  });
+  // Auto-open first
+  document.querySelector('.tl-node[data-id="primitive"]').click();
+
+  /* ===== Compare table ===== */
+  const compareRows = [
+    {
+      label: '生产力\n（生产工具）',
+      shortLabel: '生产工具',
+      cells: {
+        primitive: { text: '石器', tip: '原始社会生产力极为低下，主要使用石制工具。' },
+        slave: { text: '金属工具', tip: '奴隶社会使用金属工具，协作劳动推动生产力发展。' },
+        feudal: { text: '铁制工具', tip: '封建社会广泛使用铁制农具，耕作、水利、手工业等发展。' },
+        capitalist: { text: '蒸汽机、机器、电气、信息', tip: '资本主义社会生产工具不断革新：蒸汽机、机器、电气以至信息。' }
+      }
+    },
+    {
+      label: '生产资料\n归谁所有',
+      shortLabel: '所有制',
+      cells: {
+        primitive: { text: '生产资料原始公有（氏族公有）', tip: '原始社会生产资料归氏族公有。' },
+        slave: { text: '奴隶主占有生产资料', tip: '奴隶主占有生产资料，并完全占有奴隶。' },
+        feudal: { text: '封建土地所有制', tip: '地主占有土地，农民依附于土地和地主。' },
+        capitalist: { text: '资本家占有生产资料', tip: '资本家占有生产资料，工人一无所有只能出卖劳动力。' }
+      }
+    },
+    {
+      label: '人与人\n之间关系',
+      shortLabel: '人与人关系',
+      cells: {
+        primitive: { text: '平等互助', tip: '氏族内部平等互助，没有阶级压迫。' },
+        slave: { text: '奴隶主完全占有奴隶', tip: '奴隶毫无人身自由，是奴隶主的私有财产。' },
+        feudal: { text: '农民有一定人身自由，但不得不依附于地主', tip: '农民比奴隶有一定自由，但仍被束缚在土地上依附地主。' },
+        capitalist: { text: '劳动者出卖劳动力，受雇于资本家', tip: '形式上平等契约，实质上工人受雇于资本家。' }
+      }
+    },
+    {
+      label: '产品如何\n分配',
+      shortLabel: '产品分配',
+      cells: {
+        primitive: { text: '平均分配', tip: '由极低生产力和氏族制度决定，实行平均分配。' },
+        slave: { text: '奴隶主支配；奴隶仅获最低限度生活资料', tip: '产品由奴隶主支配，奴隶只得到维持生命的最低生活资料。' },
+        feudal: { text: '地主通过地租等方式占有农民大部分劳动成果', tip: '地主阶级以地租等形式占有农民大部分劳动成果。' },
+        capitalist: { text: '资本家占有工人创造的大量剩余价值', tip: '工人创造的剩余价值被资本家占有。' }
+      }
+    },
+    {
+      label: '政治制度\n（上层建筑）',
+      shortLabel: '政治制度',
+      cells: {
+        primitive: { text: '氏族制度（无压迫、无特权）', tip: '氏族制度，没有阶级压迫和特权。' },
+        slave: { text: '奴隶制国家（阶级矛盾不可调和的产物）', tip: '国家作为阶级矛盾不可调和的产物出现。' },
+        feudal: { text: '封建国家（君主专制、等级森严等）', tip: '封建国家常表现为君主专制、等级森严、封建迷信等。' },
+        capitalist: { text: '资本主义国家', tip: '资产阶级建立资本主义国家，维护资本主义制度。' }
+      }
+    },
+    {
+      label: '主要矛盾',
+      shortLabel: '主要矛盾',
+      cells: {
+        primitive: { text: '人与自然的矛盾', tip: '原始社会尚未形成对立阶级，主要矛盾是人与自然。' },
+        slave: { text: '奴隶主阶级和奴隶阶级之间的矛盾', tip: '奴隶社会的主要矛盾是奴隶主与奴隶的对立。' },
+        feudal: { text: '农民阶级和地主阶级之间的矛盾', tip: '封建社会的主要矛盾是农民与地主的对立。' },
+        capitalist: { text: '无产阶级和资产阶级之间的矛盾', tip: '资本主义社会的主要矛盾是无产阶级与资产阶级的对立。' }
+      }
+    }
+  ];
+
+  const tbody = document.getElementById('compareBody');
+  compareRows.forEach((row, ri) => {
+    const tr = document.createElement('tr');
+    const lab = document.createElement('td');
+    lab.className = 'row-label';
+    lab.innerHTML = row.label.replace(/\n/g, '<br>');
+    tr.appendChild(lab);
+    ORDER.forEach((sid, ci) => {
+      const td = document.createElement('td');
+      td.className = 'cell';
+      td.dataset.row = String(ri);
+      td.dataset.col = String(ci);
+      td.dataset.society = sid;
+      td.textContent = row.cells[sid].text;
+      td.title = '点击查看解说';
+      td.addEventListener('click', () => onCellClick(td, row, sid));
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  // Footer basic contradiction
+  const fr = document.createElement('tr');
+  fr.className = 'footer-row';
+  const ftd = document.createElement('td');
+  ftd.colSpan = 5;
+  ftd.textContent = '基本矛盾：生产力和生产关系、经济基础与上层建筑的矛盾运动是人类社会的基本矛盾';
+  fr.appendChild(ftd);
+  tbody.appendChild(fr);
+
+  const cellModal = document.getElementById('cellModal');
+  function onCellClick(td, row, sid) {
+    document.querySelectorAll('.compare-table td.cell').forEach(c => {
+      c.classList.remove('hl-row', 'hl-col', 'hl-both');
+    });
+    const r = td.dataset.row, c = td.dataset.col;
+    document.querySelectorAll('.compare-table td.cell').forEach(cell => {
+      const sameR = cell.dataset.row === r;
+      const sameC = cell.dataset.col === c;
+      if (sameR && sameC) cell.classList.add('hl-both');
+      else if (sameR) cell.classList.add('hl-row');
+      else if (sameC) cell.classList.add('hl-col');
+    });
+    document.getElementById('cellModalTitle').textContent =
+      SOCIETIES[sid].name + ' · ' + row.shortLabel;
+    document.getElementById('cellModalBody').textContent = row.cells[sid].tip;
+    cellModal.classList.add('show');
+  }
+  document.getElementById('cellModalClose').addEventListener('click', () => {
+    cellModal.classList.remove('show');
+  });
+  cellModal.addEventListener('click', e => {
+    if (e.target === cellModal) cellModal.classList.remove('show');
+  });
+
+  /* ===== Match game ===== */
+  const matchRounds = [
+    {
+      name: '生产工具',
+      pairs: [
+        { left: '原始社会', right: '石器', key: 'a' },
+        { left: '奴隶社会', right: '金属工具', key: 'b' },
+        { left: '封建社会', right: '铁制工具', key: 'c' },
+        { left: '资本主义社会', right: '蒸汽机、机器、电气、信息', key: 'd' }
+      ]
+    },
+    {
+      name: '生产资料所有制',
+      pairs: [
+        { left: '原始社会', right: '氏族公有', key: 'a' },
+        { left: '奴隶社会', right: '奴隶主占有', key: 'b' },
+        { left: '封建社会', right: '封建土地所有制', key: 'c' },
+        { left: '资本主义社会', right: '资本家占有', key: 'd' }
+      ]
+    },
+    {
+      name: '主要矛盾',
+      pairs: [
+        { left: '原始社会', right: '人与自然', key: 'a' },
+        { left: '奴隶社会', right: '奴隶主与奴隶', key: 'b' },
+        { left: '封建社会', right: '农民与地主', key: 'c' },
+        { left: '资本主义社会', right: '无产阶级与资产阶级', key: 'd' }
+      ]
+    }
+  ];
+
+  let matchRoundIdx = 0;
+  let matchScore = 0;
+  let matchCorrect = 0;
+  let matchTotal = 0;
+  let selectedLeft = null;
+  let matchedKeys = new Set();
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function updateMatchScoreUI() {
+    document.getElementById('matchScore').textContent = String(matchScore);
+    document.getElementById('matchCorrect').textContent = String(matchCorrect);
+    document.getElementById('matchTotal').textContent = String(matchTotal);
+    document.getElementById('matchRound').textContent =
+      '第 ' + (matchRoundIdx + 1) + ' / ' + matchRounds.length + ' 轮';
+  }
+
+  function startMatchRound() {
+    selectedLeft = null;
+    matchedKeys = new Set();
+    const round = matchRounds[matchRoundIdx];
+    document.getElementById('matchDim').textContent = '本轮维度：' + round.name;
+    document.getElementById('matchRightTitle').textContent = round.name;
+    document.getElementById('matchDone').style.display = 'none';
+
+    const leftEl = document.getElementById('matchLeft');
+    const rightEl = document.getElementById('matchRight');
+    leftEl.innerHTML = '';
+    rightEl.innerHTML = '';
+
+    const leftItems = shuffle(round.pairs);
+    const rightItems = shuffle(round.pairs);
+
+    leftItems.forEach(p => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'match-item';
+      b.textContent = p.left;
+      b.dataset.key = p.key;
+      b.dataset.side = 'left';
+      b.addEventListener('click', () => onMatchClick(b));
+      leftEl.appendChild(b);
+    });
+    rightItems.forEach(p => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'match-item';
+      b.textContent = p.right;
+      b.dataset.key = p.key;
+      b.dataset.side = 'right';
+      b.addEventListener('click', () => onMatchClick(b));
+      rightEl.appendChild(b);
+    });
+    updateMatchScoreUI();
+  }
+
+  function onMatchClick(btn) {
+    if (btn.disabled) return;
+    if (btn.dataset.side === 'left') {
+      document.querySelectorAll('#matchLeft .match-item').forEach(x => x.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedLeft = btn;
+      return;
+    }
+    // right
+    if (!selectedLeft) return;
+    matchTotal++;
+    const ok = selectedLeft.dataset.key === btn.dataset.key;
+    if (ok) {
+      matchCorrect++;
+      matchScore += 10;
+      selectedLeft.classList.add('correct');
+      btn.classList.add('correct');
+      selectedLeft.disabled = true;
+      btn.disabled = true;
+      matchedKeys.add(btn.dataset.key);
+      selectedLeft.classList.remove('selected');
+      selectedLeft = null;
+      if (matchedKeys.size === matchRounds[matchRoundIdx].pairs.length) {
+        document.getElementById('matchDone').style.display = 'block';
+        const nextBtn = document.getElementById('nextRoundBtn');
+        if (matchRoundIdx >= matchRounds.length - 1) {
+          nextBtn.style.display = 'none';
+        } else {
+          nextBtn.style.display = 'inline-block';
+        }
+      }
+    } else {
+      matchScore = Math.max(0, matchScore - 2);
+      btn.classList.add('wrong');
+      selectedLeft.classList.add('wrong');
+      const L = selectedLeft;
+      setTimeout(() => {
+        btn.classList.remove('wrong');
+        L.classList.remove('wrong', 'selected');
+      }, 450);
+      selectedLeft = null;
+    }
+    updateMatchScoreUI();
+  }
+
+  document.getElementById('nextRoundBtn').addEventListener('click', () => {
+    if (matchRoundIdx < matchRounds.length - 1) {
+      matchRoundIdx++;
+      startMatchRound();
+    }
+  });
+  document.getElementById('replayMatchBtn').addEventListener('click', () => {
+    matchRoundIdx = 0;
+    matchScore = 0;
+    matchCorrect = 0;
+    matchTotal = 0;
+    startMatchRound();
+  });
+  startMatchRound();
+
+  /* ===== Quiz ===== */
+  const quizQuestions = [
+    {
+      q: '人类社会的最初阶段、也是最低阶段是？',
+      options: ['奴隶社会', '原始社会', '封建社会', '资本主义社会'],
+      answer: 1
+    },
+    {
+      q: '原始社会的主要生产工具是？',
+      options: ['铁制工具', '蒸汽机', '石器', '电气设备'],
+      answer: 2
+    },
+    {
+      q: '原始社会产品分配的方式是？',
+      options: ['平均分配', '按资分配', '地租分配', '占有剩余价值'],
+      answer: 0
+    },
+    {
+      q: '奴隶社会的主要矛盾是？',
+      options: ['人与自然', '农民与地主', '奴隶主阶级和奴隶阶级', '无产阶级与资产阶级'],
+      answer: 2
+    },
+    {
+      q: '国家产生的正确链条是？',
+      options: [
+        '国家 → 私有制 → 阶级',
+        '生产力发展 → 个体劳动 → 私有制确立 → 阶级分化 → 国家',
+        '资产阶级革命 → 国家 → 私有制',
+        '氏族制度 → 国家 → 平均分配'
+      ],
+      answer: 1
+    },
+    {
+      q: '封建社会生产力状况的典型标志包括？',
+      options: ['石器与采集', '铁制农具、耕作技术、水利、手工业、商业、城市', '蒸汽机与工厂制度', '仅有部落联盟'],
+      answer: 1
+    },
+    {
+      q: '封建社会的主要矛盾是？',
+      options: ['奴隶与奴隶主', '农民阶级和地主阶级', '人与自然', '无产阶级与资产阶级'],
+      answer: 1
+    },
+    {
+      q: '资本主义生产关系萌芽的表现是？',
+      options: ['氏族公有', '手工工场和劳动力市场', '铁制农具普及', '部落联盟扩大'],
+      answer: 1
+    },
+    {
+      q: '资本主义制度确立的重要途径是？',
+      options: ['氏族民主', '资产阶级革命', '平均分配改革', '奴隶制扩张'],
+      answer: 1
+    },
+    {
+      q: '资本主义社会的主要矛盾是？',
+      options: ['无产阶级和资产阶级之间的矛盾', '农民与地主', '奴隶与奴隶主', '人与自然'],
+      answer: 0
+    },
+    {
+      q: '下列哪一项属于原始社会上层建筑的管理组织演进？',
+      options: ['工厂 → 公司 → 托拉斯', '氏族 → 部落 → 部落联盟', '庄园 → 行会 → 议会', '公社 → 公司 → 国家'],
+      answer: 1
+    },
+    {
+      q: '人类社会的基本矛盾是？',
+      options: [
+        '只是人与自然的矛盾',
+        '生产力和生产关系、经济基础与上层建筑的矛盾运动',
+        '只有阶级与阶级的矛盾',
+        '国家与氏族的矛盾'
+      ],
+      answer: 1
+    }
+  ];
+
+  let qi = 0;
+  let qScore = 0;
+  let answered = false;
+
+  function renderQuiz() {
+    answered = false;
+    const total = quizQuestions.length;
+    document.getElementById('quizProgressLabel').textContent = '第 ' + (qi + 1) + ' / ' + total + ' 题';
+    document.getElementById('quizProgress').style.width = ((qi / total) * 100) + '%';
+    document.getElementById('quizArea').style.display = 'block';
+    document.getElementById('quizResult').style.display = 'none';
+    document.getElementById('quizNext').style.display = 'none';
+    const fb = document.getElementById('quizFb');
+    fb.className = 'quiz-feedback';
+    fb.textContent = '';
+
+    const item = quizQuestions[qi];
+    document.getElementById('quizQ').textContent = item.q;
+    const opts = document.getElementById('quizOpts');
+    opts.innerHTML = '';
+    item.options.forEach((t, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'quiz-opt';
+      b.textContent = String.fromCharCode(65 + i) + '. ' + t;
+      b.addEventListener('click', () => answerQuiz(i, b));
+      opts.appendChild(b);
+    });
+  }
+
+  function answerQuiz(i, btn) {
+    if (answered) return;
+    answered = true;
+    const item = quizQuestions[qi];
+    const opts = document.querySelectorAll('#quizOpts .quiz-opt');
+    opts.forEach((o, idx) => {
+      o.disabled = true;
+      if (idx === item.answer) o.classList.add('correct');
+    });
+    const fb = document.getElementById('quizFb');
+    if (i === item.answer) {
+      qScore++;
+      btn.classList.add('correct');
+      fb.className = 'quiz-feedback ok';
+      fb.textContent = '回答正确！';
+    } else {
+      btn.classList.add('wrong');
+      fb.className = 'quiz-feedback bad';
+      fb.textContent = '再想想：正确答案是 ' + String.fromCharCode(65 + item.answer) + '。';
+    }
+    document.getElementById('quizProgress').style.width = (((qi + 1) / quizQuestions.length) * 100) + '%';
+    document.getElementById('quizNext').style.display = 'inline-block';
+    document.getElementById('quizNext').textContent =
+      qi >= quizQuestions.length - 1 ? '查看成绩' : '下一题';
+  }
+
+  document.getElementById('quizNext').addEventListener('click', () => {
+    if (qi >= quizQuestions.length - 1) {
+      showQuizResult();
+    } else {
+      qi++;
+      renderQuiz();
+    }
+  });
+
+  function showQuizResult() {
+    document.getElementById('quizArea').style.display = 'none';
+    const total = quizQuestions.length;
+    const pct = Math.round((qScore / total) * 100);
+    let msg = '继续加油，再看一遍时间线和对比表！';
+    let emoji = '📚';
+    if (pct >= 90) { msg = '太棒了！四种社会形态掌握得很扎实！'; emoji = '🎉'; }
+    else if (pct >= 70) { msg = '不错！再巩固一下易错点就更完美。'; emoji = '👍'; }
+    else if (pct >= 50) { msg = '有进步空间，建议回到总览图复习要点。'; emoji = '💪'; }
+    const box = document.getElementById('quizResult');
+    box.style.display = 'block';
+    box.innerHTML =
+      '<div class="big">' + emoji + '</div>' +
+      '<div>测验完成</div>' +
+      '<div class="score-num">' + qScore + ' / ' + total + '</div>' +
+      '<p style="margin:10px 0 18px;">正确率 ' + pct + '% · ' + msg + '</p>' +
+      '<button type="button" class="action-btn" id="quizRetry">再测一次</button>';
+    document.getElementById('quizRetry').addEventListener('click', () => {
+      qi = 0;
+      qScore = 0;
+      renderQuiz();
+    });
+  }
+
+  renderQuiz();
+
+  /* ===== Overview mind map ===== */
+  const mmGrid = document.getElementById('mmGrid');
+  ORDER.forEach(id => {
+    const s = SOCIETIES[id];
+    const div = document.createElement('div');
+    div.className = 'mm-card ' + s.color;
+    div.innerHTML = '<h3>' + s.name + '</h3><ul>' +
+      s.points.slice(0, 4).map(p => '<li>' + p + '</li>').join('') +
+      '</ul>';
+    mmGrid.appendChild(div);
+  });
+
+  // Esc closes modals
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      intro.classList.remove('show');
+      cellModal.classList.remove('show');
+    }
+  });
+})();
+</script>
+</body>
+</html>
