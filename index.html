@@ -439,6 +439,72 @@ a { color: inherit; }
 #introOverlay .modal { max-width: 520px; }
 #introOverlay ol { padding-left: 1.3em; margin: 10px 0; }
 #introOverlay li { margin: 6px 0; }
+
+/* ===== Illustrations ===== */
+.scene-img-wrap {
+  margin: 14px 0 8px;
+  text-align: center;
+}
+.scene-img {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  max-height: 260px;
+  margin: 0 auto;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.12);
+  background: #e8eef3;
+}
+.scene-caption {
+  margin-top: 8px;
+  font-size: .92rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .02em;
+}
+.tool-icon {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 8px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.cell-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mm-thumb {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+  background: #e8eef3;
+}
+.match-item.with-icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.match-item .tool-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 0;
+}
+@media (max-width: 640px) {
+  .scene-img { max-height: 200px; }
+  .mm-thumb { height: 100px; }
+  .tool-icon { width: 36px; height: 36px; }
+  .match-item .tool-icon { width: 36px; height: 36px; }
+}
 </style>
 </head>
 <body>
@@ -601,6 +667,19 @@ a { color: inherit; }
 (function () {
   'use strict';
 
+  const SCENE = {
+    primitive: { src: 'images/primitive.png', caption: '石器·氏族·采集' },
+    slave: { src: 'images/slave.png', caption: '金属工具·奴隶主·协作劳动' },
+    feudal: { src: 'images/feudal.png', caption: '铁制工具·地主·农耕水利' },
+    capitalist: { src: 'images/capitalist.png', caption: '机器·蒸汽电气·工厂' }
+  };
+  const TOOL_ICON = {
+    primitive: 'images/tool-stone.png',
+    slave: 'images/tool-metal.png',
+    feudal: 'images/tool-iron.png',
+    capitalist: 'images/tool-machine.png'
+  };
+
   const SOCIETIES = {
     primitive: {
       id: 'primitive',
@@ -690,7 +769,12 @@ a { color: inherit; }
       document.querySelectorAll('.tl-node').forEach(n => n.classList.remove('active'));
       node.classList.add('active');
       const s = SOCIETIES[node.dataset.id];
+      const sc = SCENE[s.id];
       let html = '<span class="society-chip chip-' + s.color + '">' + s.name + '</span>';
+      html += '<div class="scene-img-wrap">' +
+        '<img class="scene-img" src="' + sc.src + '" alt="' + s.name + '场景插图" loading="lazy">' +
+        '<div class="scene-caption">记忆口诀：「' + sc.caption + '」</div>' +
+        '</div>';
       html += '<ul>' + s.points.map(p => '<li>' + p + '</li>').join('') + '</ul>';
       if (s.whyNext) {
         html += '<div class="why-next"><strong>为何进入下一阶段：</strong>' + s.whyNext + '</div>';
@@ -781,7 +865,12 @@ a { color: inherit; }
       td.dataset.row = String(ri);
       td.dataset.col = String(ci);
       td.dataset.society = sid;
-      td.textContent = row.cells[sid].text;
+      if (ri === 0 && TOOL_ICON[sid]) {
+        td.innerHTML = '<div class="cell-with-icon"><img class="tool-icon" src="' +
+          TOOL_ICON[sid] + '" alt="" loading="lazy"><span>' + row.cells[sid].text + '</span></div>';
+      } else {
+        td.textContent = row.cells[sid].text;
+      }
       td.title = '点击查看解说';
       td.addEventListener('click', () => onCellClick(td, row, sid));
       tr.appendChild(td);
@@ -827,10 +916,10 @@ a { color: inherit; }
     {
       name: '生产工具',
       pairs: [
-        { left: '原始社会', right: '石器', key: 'a' },
-        { left: '奴隶社会', right: '金属工具', key: 'b' },
-        { left: '封建社会', right: '铁制工具', key: 'c' },
-        { left: '资本主义社会', right: '蒸汽机、机器、电气、信息', key: 'd' }
+        { left: '原始社会', right: '石器', key: 'a', toolIcon: 'images/tool-stone.png' },
+        { left: '奴隶社会', right: '金属工具', key: 'b', toolIcon: 'images/tool-metal.png' },
+        { left: '封建社会', right: '铁制工具', key: 'c', toolIcon: 'images/tool-iron.png' },
+        { left: '资本主义社会', right: '蒸汽机、机器、电气、信息', key: 'd', toolIcon: 'images/tool-machine.png' }
       ]
     },
     {
@@ -906,8 +995,12 @@ a { color: inherit; }
     rightItems.forEach(p => {
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'match-item';
-      b.textContent = p.right;
+      b.className = 'match-item' + (p.toolIcon ? ' with-icon' : '');
+      if (p.toolIcon) {
+        b.innerHTML = '<img class="tool-icon" src="' + p.toolIcon + '" alt="" loading="lazy"><span>' + p.right + '</span>';
+      } else {
+        b.textContent = p.right;
+      }
       b.dataset.key = p.key;
       b.dataset.side = 'right';
       b.addEventListener('click', () => onMatchClick(b));
@@ -1145,11 +1238,14 @@ a { color: inherit; }
   const mmGrid = document.getElementById('mmGrid');
   ORDER.forEach(id => {
     const s = SOCIETIES[id];
+    const sc = SCENE[id];
     const div = document.createElement('div');
     div.className = 'mm-card ' + s.color;
-    div.innerHTML = '<h3>' + s.name + '</h3><ul>' +
-      s.points.slice(0, 4).map(p => '<li>' + p + '</li>').join('') +
-      '</ul>';
+    div.innerHTML =
+      '<img class="mm-thumb" src="' + sc.src + '" alt="' + s.name + '" loading="lazy">' +
+      '<h3>' + s.name + '</h3>' +
+      '<div class="scene-caption" style="margin:0 0 8px;font-size:.85rem;">「' + sc.caption + '」</div>' +
+      '<ul>' + s.points.slice(0, 4).map(p => '<li>' + p + '</li>').join('') + '</ul>';
     mmGrid.appendChild(div);
   });
 
